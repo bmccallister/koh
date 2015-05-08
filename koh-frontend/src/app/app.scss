@@ -1,0 +1,37 @@
+@import "styles/_base";
+@import "styles/bootstrap-mincer";
+@import "styles/_bootstrap";
+
+.dataTable {
+	border: 1px solid #252525;
+}
+.dataTable .row {
+	margin: 10px auto;
+}
+.dataTable .row .col-md-6 input {
+	width: 90%;
+}
+
+.createData {
+	width: 100%;
+	max-width: 300px;
+	border: 1px solid #252525;
+	padding: 10px;
+}
+
+.errorMessage {
+	margin-top: 10px;
+	color: rgb(255,100,100);
+	font-size: 12pt;
+	padding: 10px;
+	border: 1px solid rgb(255,100,100);
+}
+
+
+.successMessage {
+	margin-top: 10px;
+	color: rgb(100,255,100);
+	font-size: 12pt;
+	padding: 10px;
+	border: 1px solid rgb(100,255,100);
+}

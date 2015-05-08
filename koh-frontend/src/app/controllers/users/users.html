@@ -1,0 +1,40 @@
+<div class="container dataTable">
+	<div class="row" ng-repeat="user in userList">
+		<div class="col-md-12" ng-if="isEditingUser(user)">
+			<div class="col-md-2">{{$index}}</div>
+			<div class="col-md-3"><input ng-model="user.user"></div>
+			<div class="col-md-3"><input ng-model="user.firstname"></div>
+			<div class="col-md-3"><input ng-model="user.lastname"></div>
+			<div class="col-md-1"><button ng-click="saveUser(user)">Save</button></div>
+		</div>
+		<div class="col-md-12" ng-if="!isEditingUser(user)">
+			<div class="col-md-2">{{$index}}</div>
+			<div class="col-md-3">{{user.user}}</div>
+			<div class="col-md-3">{{user.firstname}}</div>
+			<div class="col-md-3">{{user.lastname}}</div>
+			<div class="col-md-1"><button ng-click="editUser(user)">Edit</button></div>
+		</div>
+	</div>
+</div>
+<hr size=1>
+<div class="container createData" ng-if="createNew">
+	<div class="row">
+		<div class="col-md-6">Username</div>
+		<div class="col-md-6"><input ng-model="newUser.user"></div>
+	</div>
+	<div class="row">
+		<div class="col-md-6">First Name</div>
+		<div class="col-md-6"><input ng-model="newUser.firstname"></div>
+	</div>
+	<div class="row">
+		<div class="col-md-6">Last Name</div>
+		<div class="col-md-6"><input ng-model="newUser.lastname"></div>
+	</div>
+	<div class="row">
+		<div class="col-md-6"><button ng-click="saveNewUser()">Save</div>
+		<div class="col-md-6"><button ng-click="cancelCreate()">Cancel</div>
+	</div>
+</div>
+<div class="container errorMessage" ng-if="errorMessage">{{errorMessage}}</div>
+<div class="container successMessage" ng-if="successMessage">{{successMessage}}</div>
+<button ng-click="doCreate();" ng-if="!createNew">Create</button>
