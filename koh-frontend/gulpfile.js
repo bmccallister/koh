@@ -168,7 +168,7 @@ gulp.task('statics', g.serve({
         options.base.map(function (path) { return connect.static(path); })
       ].reduce(function (a, b) { return a.concat(b); }); // flatten array
     }
-	}
+  }
 }));
 
 
@@ -211,12 +211,14 @@ gulp.task('lint', ['jshint', 'csslint']);
 /**
  * Test
  */
-gulp.task('test', ['templates'], function () {
-  return testFiles()
-    .pipe(g.karma({
-      configFile: 'karma.conf.js',
-      action: 'run'
-    }));
+
+gulp.task('test', [], function () {
+      // Add at
+      return gulp.src(["./src/tests/*.js"])
+        .pipe(protractor({
+            configFile: "test/runtests.js"
+        }))
+        .on('error', function(e) { throw e })
 });
 
 /**
