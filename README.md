@@ -1,3 +1,5 @@
+KOH-API : This project was designed to work OOB with restangular
+
 The project is made up of three sections
 
 koh-api:
