@@ -15,8 +15,12 @@ var gulp = require('gulp'),
     browserify = require('gulp-browserify'),
     modRewrite = require('connect-modrewrite'),
     concat = require('gulp-concat'),
+    url = require("url"),
+    pushState = require('connect-pushstate'),///lib/pushstate').pushState,
     protractor = require("gulp-protractor").protractor,
+    historyApiFallback = require('connect-history-api-fallback'),
     isWatching = false;
+
 
 var htmlminOpts = {
   removeComments: true,
@@ -135,7 +139,21 @@ function index () {
     .pipe(gulp.dest('./.tmp/'))
     .pipe(livereload());
 }
-
+var sfy = function(o) {
+  var cache = [];
+  JSON.stringify(o, function(key, value) {
+      if (typeof value === 'object' && value !== null) {
+          if (cache.indexOf(value) !== -1) {
+              // Circular reference found, discard key
+              return;
+          }
+          // Store value in our collection
+          cache.push(value);
+      }
+      return value;
+  });
+  cache = null; // Enable garbage collection
+}
 /**
  * Assets
  */
@@ -158,25 +176,25 @@ gulp.task('dist', ['vendors', 'assets', 'styles-dist', 'scripts-dist'], function
 /**
  * Static file server
  */
-gulp.task('statics', g.serve({
-  port: 3000,
-  root: ['./.tmp', './.tmp/src/app', './src/app', 'bower_components', 'node_modules'],
-  options: {
-   middleware: function (connect, options) {
-      return [
-        [require('connect-modrewrite')(['!(\\..+)$ / [L]'])],
-        options.base.map(function (path) { return connect.static(path); })
-      ].reduce(function (a, b) { return a.concat(b); }); // flatten array
+
+gulp.task('connect', function() {
+  g.connect.server({
+    root: ['./.tmp', './.tmp/src/app', './src/app', 'bower_components', 'node_modules'],
+    livereload: true,
+    port: 3000,
+     middleware: function(connect, o) {
+      console.log('hit:' + o.base);
+       return [
+            modRewrite([
+                    '!\\.\\w+$ /index.html [L]'
+                ])
+        ];
     }
-  }
-}));
+  });
+});
 
-
-/**
- * Watch
- */
 gulp.task('serve', ['watch']);
-gulp.task('watch', ['statics', 'default', 'browserify'], function () {
+gulp.task('watch', ['connect', 'default', 'browserify'], function () {
   isWatching = true;
   // Initiate livereload server:
   g.livereload.listen();
@@ -254,7 +272,7 @@ function testFiles() {
  * All CSS files as a stream
  */
 function cssFiles (opt) {
-  return gulp.src('./.tmp/css/**/*.css', opt);
+  return gulp.src(['./.tmp/css/**/*.css'], opt);
 }
 
 /**

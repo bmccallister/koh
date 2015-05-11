@@ -8,10 +8,9 @@ var Users = require('../data/models/users');
 
 var initializeRoutes = function(router) {
 	
-	router.get('/', function(req, res, next) {
-	  res.render('index', { title: 'KOHAPI' });
-	  next()
-	});
+	router.route('/').get(function(req, res) {
+		res.json({ 'message': 'API Entry point'});
+	})
 
 	router.route('/users').get(function(req, res) {
 		Users.find(function(err, users) {

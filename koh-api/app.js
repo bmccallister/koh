@@ -30,6 +30,11 @@ router.use(bodyParser.urlencoded({
 // Set up all routes
 routes.initializeRoutes(router);
 
+app.get('/', function(req, res, next) {
+  console.log('here');
+  res.send('index', 'Error: Unauthorized access');
+});
+
 app.use('/api', router);
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
